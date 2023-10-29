@@ -1,14 +1,14 @@
 {
   "name": "vscode-web-playground",
   "description": "Web playground for VS Code",
-  "version": "0.0.13",
+  "version": "0.0.1",
   "publisher": "vscode",
   "license": "MIT",
   "enabledApiProposals": [
     "fileSearchProvider",
     "textSearchProvider"
   ],
-  "private": true,
+  "private": "false",
   "activationEvents": [
     "onFileSystem:memfs",
     "onDebug"
@@ -50,13 +50,32 @@
   "scripts": {
     "compile": "yarn webpack-cli --config extension.webpack.config --mode production",
     "watch": "yarn webpack-cli --config extension.webpack.config --mode production --watch --info-verbosity verbose",
-    "prepublish": "yarn webpack-cli --config extension.webpack.config --mode production"
+    "prepublish": "yarn webpack-cli --config extension.webpack.config --mode production",
+    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts"
   },
   "devDependencies": {
     "@types/vscode": "1.83.1",
     "ts-loader": "9.5.0",
     "typescript": "5.2.2",
     "webpack": "5.89.0",
-    "webpack-cli": "5.1.4"
+    "webpack-cli": "5.1.4",
+    "typescript-esbuild": "0.3.1"
+  },
+  "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
+  "bugs": {
+    "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodeEditorLand/CodeEditorLand.git"
+  },
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": {
+    "name": "Nikola Hristov",
+    "email": "nikola@nikolahristov.tech",
+    "url": "https://nikolahristov.tech"
   }
 }
