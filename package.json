@@ -1,33 +1,32 @@
 {
   "name": "vscode-web-playground",
-  "description": "Web playground for VS Code",
   "version": "0.0.1",
-  "publisher": "vscode",
-  "license": "MIT",
-  "enabledApiProposals": [
-    "fileSearchProvider",
-    "textSearchProvider"
-  ],
   "private": "false",
-  "activationEvents": [
-    "onFileSystem:memfs",
-    "onDebug"
-  ],
+  "description": "Web playground for VS Code",
+  "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
+  "bugs": {
+    "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodeEditorLand/CodeEditorLand.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Nikola Hristov",
+    "email": "nikola@nikolahristov.tech",
+    "url": "https://nikolahristov.tech"
+  },
+  "publisher": "playform",
+  "type": "module",
   "browser": "./dist/extension",
-  "engines": {
-    "vscode": "1.48.0"
+  "scripts": {
+    "compile": "yarn webpack-cli --config extension.webpack.config --mode production",
+    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts",
+    "prepublish": "yarn webpack-cli --config extension.webpack.config --mode production",
+    "watch": "yarn webpack-cli --config extension.webpack.config --mode production --watch --info-verbosity verbose"
   },
   "contributes": {
-    "viewsWelcome": [
-      {
-        "view": "debug",
-        "contents": "In order to run and debug you'll need to create a local workspace."
-      },
-      {
-        "view": "terminal",
-        "contents": "In order to run and debug you'll need to create a local workspace."
-      }
-    ],
     "taskDefinitions": [
       {
         "type": "custombuildscript",
@@ -45,37 +44,38 @@
           }
         }
       }
+    ],
+    "viewsWelcome": [
+      {
+        "view": "debug",
+        "contents": "In order to run and debug you'll need to create a local workspace."
+      },
+      {
+        "view": "terminal",
+        "contents": "In order to run and debug you'll need to create a local workspace."
+      }
     ]
   },
-  "scripts": {
-    "compile": "yarn webpack-cli --config extension.webpack.config --mode production",
-    "watch": "yarn webpack-cli --config extension.webpack.config --mode production --watch --info-verbosity verbose",
-    "prepublish": "yarn webpack-cli --config extension.webpack.config --mode production",
-    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts"
-  },
+  "activationEvents": [
+    "onFileSystem:memfs",
+    "onDebug"
+  ],
   "devDependencies": {
     "@types/vscode": "1.83.1",
     "ts-loader": "9.5.0",
     "typescript": "5.2.2",
+    "typescript-esbuild": "0.3.1",
     "webpack": "5.89.0",
-    "webpack-cli": "5.1.4",
-    "typescript-esbuild": "0.3.1"
+    "webpack-cli": "5.1.4"
   },
-  "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
-  "bugs": {
-    "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
+  "engines": {
+    "vscode": "1.48.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/CodeEditorLand/CodeEditorLand.git"
-  },
-  "type": "module",
   "publishConfig": {
     "access": "public"
   },
-  "author": {
-    "name": "Nikola Hristov",
-    "email": "nikola@nikolahristov.tech",
-    "url": "https://nikolahristov.tech"
-  }
+  "enabledApiProposals": [
+    "fileSearchProvider",
+    "textSearchProvider"
+  ]
 }
