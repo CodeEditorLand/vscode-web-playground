@@ -3,8 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-declare module 'vscode' {
-
+declare module "vscode" {
 	// https://github.com/microsoft/vscode/issues/59921
 
 	/**
@@ -150,16 +149,16 @@ declare module 'vscode' {
 		/**
 		 * Markdown text of the message.
 		 */
-		text: string,
+		text: string;
 		/**
 		 * Whether the source of the message is trusted, command links are disabled for untrusted message sources.
 		 * Messaged are untrusted by default.
 		 */
-		trusted?: boolean,
+		trusted?: boolean;
 		/**
 		 * The message type, this affects how the message will be rendered.
 		 */
-		type: TextSearchCompleteMessageType,
+		type: TextSearchCompleteMessageType;
 	}
 
 	/**
@@ -257,7 +256,12 @@ declare module 'vscode' {
 		 * @param progress A progress callback that must be invoked for all results.
 		 * @param token A cancellation token.
 		 */
-		provideTextSearchResults(query: TextSearchQuery, options: TextSearchOptions, progress: Progress<TextSearchResult>, token: CancellationToken): ProviderResult<TextSearchComplete>;
+		provideTextSearchResults(
+			query: TextSearchQuery,
+			options: TextSearchOptions,
+			progress: Progress<TextSearchResult>,
+			token: CancellationToken
+		): ProviderResult<TextSearchComplete>;
 	}
 
 	export namespace workspace {
@@ -270,6 +274,9 @@ declare module 'vscode' {
 		 * @param provider The provider.
 		 * @return A {@link Disposable} that unregisters this provider when being disposed.
 		 */
-		export function registerTextSearchProvider(scheme: string, provider: TextSearchProvider): Disposable;
+		export function registerTextSearchProvider(
+			scheme: string,
+			provider: TextSearchProvider
+		): Disposable;
 	}
 }
