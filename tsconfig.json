@@ -4,9 +4,12 @@
 		"module": "commonjs",
 		"moduleResolution": "node",
 		"outDir": "out",
-		"lib": ["es2016", "WebWorker"],
+		"lib": [ "es2016", "WebWorker" ],
 		"sourceMap": true
 	},
 
-	"include": ["src", "./*.d.ts"]
+	"include": [
+		"src",
+		"./*.d.ts"
+	]
 }
