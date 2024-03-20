@@ -1,62 +1,77 @@
 {
-  "name": "vscode-web-playground",
-  "description": "Web playground for VS Code",
-  "version": "0.0.13",
-  "publisher": "vscode",
-  "license": "MIT",
-  "enabledApiProposals": [
-    "fileSearchProvider",
-    "textSearchProvider"
-  ],
-  "private": true,
-  "activationEvents": [
-    "onFileSystem:memfs",
-    "onDebug"
-  ],
-  "browser": "./dist/extension",
-  "engines": {
-    "vscode": "^1.48.0"
-  },
-  "contributes": {
-    "viewsWelcome": [
-      {
-        "view": "debug",
-        "contents": "In order to run and debug you'll need to create a local workspace."
-      },
-      {
-        "view": "terminal",
-        "contents": "In order to run and debug you'll need to create a local workspace."
-      }
-    ],
-    "taskDefinitions": [
-      {
-        "type": "custombuildscript",
-        "required": [
-          "flavor"
-        ],
-        "properties": {
-          "flavor": {
-            "type": "string",
-            "description": "The build flavor. Should be either '32' or '64'."
-          },
-          "flags": {
-            "type": "array",
-            "description": "Additional build flags."
-          }
-        }
-      }
-    ]
-  },
-  "scripts": {
-    "compile": "yarn webpack-cli --config extension.webpack.config --mode production",
-    "watch": "yarn webpack-cli --config extension.webpack.config --mode production --watch --info-verbosity verbose",
-    "prepublish": "yarn webpack-cli --config extension.webpack.config --mode production"
-  },
-  "devDependencies": {
-    "@types/vscode": "^1.48.0",
-    "ts-loader": "^4.4.2",
-    "typescript": "^3.9.7",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12"
-  }
+	"name": "vscode-web-playground",
+	"version": "0.0.1",
+	"private": false,
+	"description": "Web playground for VS Code",
+	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
+	"bugs": {
+		"url": "https://github.com/CodeEditorLand/Foundation/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CodeEditorLand/Foundation.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"author": {
+		"name": "Playform",
+		"email": "Hello@Playform.Cloud",
+		"url": "https://playform.cloud"
+	},
+	"type": "module",
+	"browser": "./dist/extension",
+	"scripts": {
+		"compile": "yarn webpack-cli --config extension.webpack.config --mode production",
+		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
+		"prepublish": "yarn webpack-cli --config extension.webpack.config --mode production",
+		"watch": "yarn webpack-cli --config extension.webpack.config --mode production --watch --info-verbosity verbose"
+	},
+	"contributes": {
+		"taskDefinitions": [
+			{
+				"properties": {
+					"flags": {
+						"description": "Additional build flags.",
+						"type": "array"
+					},
+					"flavor": {
+						"description": "The build flavor. Should be either '32' or '64'.",
+						"type": "string"
+					}
+				},
+				"required": [
+					"flavor"
+				],
+				"type": "custombuildscript"
+			}
+		],
+		"viewsWelcome": [
+			{
+				"contents": "In order to run and debug you'll need to create a local workspace.",
+				"view": "debug"
+			},
+			{
+				"contents": "In order to run and debug you'll need to create a local workspace.",
+				"view": "terminal"
+			}
+		]
+	},
+	"activationEvents": [
+		"onFileSystem:memfs",
+		"onDebug"
+	],
+	"devDependencies": {
+		"@types/vscode": "^1.48.0",
+		"ts-loader": "^4.4.2",
+		"typescript": "^3.9.7",
+		"typescript-esbuild": "latest",
+		"webpack": "^4.43.0",
+		"webpack-cli": "^3.3.12"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"enabledApiProposals": [
+		"fileSearchProvider",
+		"textSearchProvider"
+	]
 }
