@@ -1,31 +1,16 @@
 {
-	"name": "vscode-web-playground",
-	"version": "0.0.1",
-	"private": false,
-	"description": "Web playground for VS Code",
-	"keywords": [
-		"land"
+	"activationEvents": [
+		"onFileSystem:memfs",
+		"onDebug"
 	],
-	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandWebPlayground#readme",
-	"bugs": {
-		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandWebPlayground/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+HTTPS://github.com/CodeEditorLand/LandWebPlayground.git"
-	},
-	"license": "SEE LICENSE IN LICENSE",
 	"author": {
-		"name": "🌆 — Land —",
 		"email": "Land@PlayForm.Cloud",
+		"name": "🌆 — Land —",
 		"url": "HTTPS://Land.PlayForm.Cloud"
 	},
-	"type": "module",
 	"browser": "./dist/extension",
-	"scripts": {
-		"Document": "Document 'Source/**/*.ts'",
-		"compile": "yarn webpack-cli --config extension.webpack.config --mode production",
-		"prepublishOnly": "Build 'Source/**/*.ts'"
+	"bugs": {
+		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandWebPlayground/issues"
 	},
 	"contributes": {
 		"taskDefinitions": [
@@ -57,20 +42,35 @@
 			}
 		]
 	},
-	"activationEvents": [
-		"onFileSystem:memfs",
-		"onDebug"
-	],
+	"description": "Web playground for VS Code",
 	"devDependencies": {
 		"@playform/build": "0.0.7",
 		"@playform/document": "0.0.6",
 		"ts-loader": "9.5.1"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"enabledApiProposals": [
 		"fileSearchProvider",
 		"textSearchProvider"
-	]
+	],
+	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandWebPlayground#readme",
+	"keywords": [
+		"land"
+	],
+	"license": "SEE LICENSE IN LICENSE",
+	"name": "vscode-web-playground",
+	"private": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+HTTPS://github.com/CodeEditorLand/LandWebPlayground.git"
+	},
+	"scripts": {
+		"Document": "Document 'Source/**/*.ts'",
+		"compile": "yarn webpack-cli --config extension.webpack.config --mode production",
+		"prepublishOnly": "Build 'Source/**/*.ts'"
+	},
+	"type": "module",
+	"version": "0.0.1"
 }
