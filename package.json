@@ -1,0 +1,76 @@
+{
+	"name": "vscode-web-playground",
+	"version": "0.0.1",
+	"private": false,
+	"description": "Web playground for VS Code",
+	"keywords": [
+		"land"
+	],
+	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandWebPlayground#readme",
+	"bugs": {
+		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandWebPlayground/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+HTTPS://github.com/CodeEditorLand/LandWebPlayground.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"author": {
+		"name": "🌆 — Land —",
+		"email": "Land@PlayForm.Cloud",
+		"url": "HTTPS://Land.PlayForm.Cloud"
+	},
+	"type": "module",
+	"browser": "./dist/extension",
+	"scripts": {
+		"Document": "Document 'Source/**/*.ts'",
+		"compile": "yarn webpack-cli --config extension.webpack.config --mode production",
+		"prepublishOnly": "Build 'Source/**/*.ts'"
+	},
+	"contributes": {
+		"taskDefinitions": [
+			{
+				"properties": {
+					"flags": {
+						"description": "Additional build flags.",
+						"type": "array"
+					},
+					"flavor": {
+						"description": "The build flavor. Should be either '32' or '64'.",
+						"type": "string"
+					}
+				},
+				"required": [
+					"flavor"
+				],
+				"type": "custombuildscript"
+			}
+		],
+		"viewsWelcome": [
+			{
+				"contents": "In order to run and debug you'll need to create a local workspace.",
+				"view": "debug"
+			},
+			{
+				"contents": "In order to run and debug you'll need to create a local workspace.",
+				"view": "terminal"
+			}
+		]
+	},
+	"activationEvents": [
+		"onFileSystem:memfs",
+		"onDebug"
+	],
+	"devDependencies": {
+		"@playform/build": "0.0.7",
+		"@playform/document": "0.0.6",
+		"ts-loader": "9.5.1"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"enabledApiProposals": [
+		"fileSearchProvider",
+		"textSearchProvider"
+	]
+}
