@@ -1,26 +1,6 @@
 {
 	"name": "vscode-web-playground",
-	"version": "0.0.1",
-	"private": false,
 	"description": "Web playground for VS Code",
-	"keywords": [
-		"land"
-	],
-	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandWebPlayground#readme",
-	"bugs": {
-		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandWebPlayground/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+HTTPS://github.com/CodeEditorLand/LandWebPlayground.git"
-	},
-	"license": "SEE LICENSE IN LICENSE",
-	"author": {
-		"name": "🛬 Land —",
-		"email": "Land@PlayForm.Cloud",
-		"url": "HTTPS://Land.PlayForm.Cloud"
-	},
-	"type": "module",
 	"browser": "./dist/extension",
 	"scripts": {
 		"Document": "Document 'Source/**/*.ts'",
@@ -63,11 +43,7 @@
 	],
 	"devDependencies": {
 		"@playform/build": "0.0.7",
-		"@playform/document": "0.0.6",
 		"ts-loader": "9.5.1"
-	},
-	"publishConfig": {
-		"access": "public"
 	},
 	"enabledApiProposals": [
 		"fileSearchProvider",
