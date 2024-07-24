@@ -40,7 +40,7 @@
 		"onDebug"
 	],
 	"devDependencies": {
-		"ts-loader": "4.4.2"
+		"ts-loader": "9.5.1"
 	},
 	"enabledApiProposals": [
 		"fileSearchProvider",
