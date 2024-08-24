@@ -1,9 +1,10 @@
 {
-	"activationEvents": [
-		"onFileSystem:memfs",
-		"onDebug"
-	],
+	"name": "vscode-web-playground",
+	"description": "Web playground for VS Code",
 	"browser": "./dist/extension",
+	"scripts": {
+		"compile": "yarn webpack-cli --config extension.webpack.config --mode production"
+	},
 	"contributes": {
 		"taskDefinitions": [
 			{
@@ -34,16 +35,15 @@
 			}
 		]
 	},
-	"description": "Web playground for VS Code",
+	"activationEvents": [
+		"onFileSystem:memfs",
+		"onDebug"
+	],
 	"devDependencies": {
-		"ts-loader": "^4.4.2"
+		"ts-loader": "9.5.1"
 	},
 	"enabledApiProposals": [
 		"fileSearchProvider",
 		"textSearchProvider"
-	],
-	"name": "vscode-web-playground",
-	"scripts": {
-		"compile": "yarn webpack-cli --config extension.webpack.config --mode production"
-	}
+	]
 }
