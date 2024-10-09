@@ -23,16 +23,22 @@ import {
 	Range,
 	TextSearchComplete,
 	TextSearchOptions,
-	TextSearchQuery,
 	TextSearchProvider,
+	TextSearchQuery,
 	TextSearchResult,
 	Uri,
 	workspace,
-} from 'vscode';
-import { largeTSFile, getImageFile, debuggableFile, windows1251File, gbkFile } from './exampleFiles';
+} from "vscode";
+
+import {
+	debuggableFile,
+	gbkFile,
+	getImageFile,
+	largeTSFile,
+	windows1251File,
+} from "./exampleFiles";
 
 export class File implements FileStat {
-
 	type: FileType;
 	ctime: number;
 	mtime: number;
@@ -41,7 +47,10 @@ export class File implements FileStat {
 	name: string;
 	data?: Uint8Array;
 
-	constructor(public uri: Uri, name: string) {
+	constructor(
+		public uri: Uri,
+		name: string,
+	) {
 		this.type = FileType.File;
 		this.ctime = Date.now();
 		this.mtime = Date.now();
@@ -51,7 +60,6 @@ export class File implements FileStat {
 }
 
 export class Directory implements FileStat {
-
 	type: FileType;
 	ctime: number;
 	mtime: number;
@@ -60,7 +68,10 @@ export class Directory implements FileStat {
 	name: string;
 	entries: Map<string, File | Directory>;
 
-	constructor(public uri: Uri, name: string) {
+	constructor(
+		public uri: Uri,
+		name: string,
+	) {
 		this.type = FileType.Directory;
 		this.ctime = Date.now();
 		this.mtime = Date.now();
@@ -74,16 +85,24 @@ export type Entry = File | Directory;
 
 const textEncoder = new TextEncoder();
 
-export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearchProvider, Disposable {
-	static scheme = 'memfs';
+export class MemFS
+	implements
+		FileSystemProvider,
+		FileSearchProvider,
+		TextSearchProvider,
+		Disposable
+{
+	static scheme = "memfs";
 
 	private readonly disposable: Disposable;
 
 	constructor() {
 		this.disposable = Disposable.from(
-			workspace.registerFileSystemProvider(MemFS.scheme, this, { isCaseSensitive: true }),
+			workspace.registerFileSystemProvider(MemFS.scheme, this, {
+				isCaseSensitive: true,
+			}),
 			workspace.registerFileSearchProvider(MemFS.scheme, this),
-			workspace.registerTextSearchProvider(MemFS.scheme, this)
+			workspace.registerTextSearchProvider(MemFS.scheme, this),
 		);
 	}
 
@@ -95,19 +114,77 @@ export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearch
 		this.createDirectory(Uri.parse(`memfs:/sample-folder/`));
 
 		// most common files types
-		this.writeFile(Uri.parse(`memfs:/sample-folder/large.ts`), textEncoder.encode(largeTSFile), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/file.txt`), textEncoder.encode('foo'), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/file.html`), textEncoder.encode('<html><body><h1 class="hd">Hello</h1></body></html>'), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/file.js`), textEncoder.encode('console.log("JavaScript")'), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/file.json`), textEncoder.encode('{ "json": true }'), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/file.ts`), textEncoder.encode('console.log("TypeScript")'), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/file.css`), textEncoder.encode('* { color: green; }'), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/file.md`), textEncoder.encode(debuggableFile), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/file.xml`), textEncoder.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>'), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/file.py`), textEncoder.encode('import base64, sys; base64.decode(open(sys.argv[1], "rb"), open(sys.argv[2], "wb"))'), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/file.yaml`), textEncoder.encode('- just: write something'), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/file.jpg`), getImageFile(), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/file.php`), textEncoder.encode('<?php echo "Hello World!"; ?>'), { create: true, overwrite: true });
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/large.ts`),
+			textEncoder.encode(largeTSFile),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/file.txt`),
+			textEncoder.encode("foo"),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/file.html`),
+			textEncoder.encode(
+				'<html><body><h1 class="hd">Hello</h1></body></html>',
+			),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/file.js`),
+			textEncoder.encode('console.log("JavaScript")'),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/file.json`),
+			textEncoder.encode('{ "json": true }'),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/file.ts`),
+			textEncoder.encode('console.log("TypeScript")'),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/file.css`),
+			textEncoder.encode("* { color: green; }"),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/file.md`),
+			textEncoder.encode(debuggableFile),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/file.xml`),
+			textEncoder.encode(
+				'<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>',
+			),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/file.py`),
+			textEncoder.encode(
+				'import base64, sys; base64.decode(open(sys.argv[1], "rb"), open(sys.argv[2], "wb"))',
+			),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/file.yaml`),
+			textEncoder.encode("- just: write something"),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/file.jpg`),
+			getImageFile(),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/file.php`),
+			textEncoder.encode('<?php echo "Hello World!"; ?>'),
+			{ create: true, overwrite: true },
+		);
 
 		// some more files & folders
 		this.createDirectory(Uri.parse(`memfs:/sample-folder/folder/`));
@@ -117,45 +194,83 @@ export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearch
 		this.createDirectory(Uri.parse(`memfs:/sample-folder/xyz/abc`));
 		this.createDirectory(Uri.parse(`memfs:/sample-folder/xyz/def`));
 
-		this.writeFile(Uri.parse(`memfs:/sample-folder/folder/empty.txt`), new Uint8Array(0), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/folder/empty.foo`), new Uint8Array(0), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/folder/file.ts`), textEncoder.encode('let a:number = true; console.log(a);'), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/large/rnd.foo`), randomData(50000), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/xyz/UPPER.txt`), textEncoder.encode('UPPER'), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/xyz/upper.txt`), textEncoder.encode('upper'), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/xyz/def/foo.md`), textEncoder.encode('*MemFS*'), { create: true, overwrite: true });
-		this.writeFile(Uri.parse(`memfs:/sample-folder/workspaces/mem.code-workspace`), textEncoder.encode(JSON.stringify({
-			"folders": [
-				{
-					"name": "sample-folder-large",
-					"uri": "memfs:/sample-folder/large"
-				},
-				{
-					"name": "sample-folder-xyz",
-					"uri": "memfs:/sample-folder/xyz"
-				},
-				{
-					"name": "sample-folder-folder",
-					"uri": "memfs:/sample-folder/folder"
-				}
-			]
-		}, undefined, '\t')), { create: true, overwrite: true });
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/folder/empty.txt`),
+			new Uint8Array(0),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/folder/empty.foo`),
+			new Uint8Array(0),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/folder/file.ts`),
+			textEncoder.encode("let a:number = true; console.log(a);"),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/large/rnd.foo`),
+			randomData(50000),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/xyz/UPPER.txt`),
+			textEncoder.encode("UPPER"),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/xyz/upper.txt`),
+			textEncoder.encode("upper"),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/xyz/def/foo.md`),
+			textEncoder.encode("*MemFS*"),
+			{ create: true, overwrite: true },
+		);
+		this.writeFile(
+			Uri.parse(`memfs:/sample-folder/workspaces/mem.code-workspace`),
+			textEncoder.encode(
+				JSON.stringify(
+					{
+						"folders": [
+							{
+								"name": "sample-folder-large",
+								"uri": "memfs:/sample-folder/large",
+							},
+							{
+								"name": "sample-folder-xyz",
+								"uri": "memfs:/sample-folder/xyz",
+							},
+							{
+								"name": "sample-folder-folder",
+								"uri": "memfs:/sample-folder/folder",
+							},
+						],
+					},
+					undefined,
+					"\t",
+				),
+			),
+			{ create: true, overwrite: true },
+		);
 
 		// some files in different encodings
 		this.createDirectory(Uri.parse(`memfs:/sample-folder/encodings/`));
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/encodings/windows1251.txt`),
 			windows1251File,
-			{ create: true, overwrite: true }
+			{ create: true, overwrite: true },
 		);
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/encodings/gbk.txt`),
 			gbkFile,
-			{ create: true, overwrite: true }
+			{ create: true, overwrite: true },
 		);
 	}
 
-	root = new Directory(Uri.parse('memfs:/'), '');
+	root = new Directory(Uri.parse("memfs:/"), "");
 
 	// --- manage file metadata
 
@@ -182,7 +297,11 @@ export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearch
 		throw FileSystemError.FileNotFound();
 	}
 
-	writeFile(uri: Uri, content: Uint8Array, options: { create: boolean, overwrite: boolean }): void {
+	writeFile(
+		uri: Uri,
+		content: Uint8Array,
+		options: { create: boolean; overwrite: boolean },
+	): void {
 		let basename = this._basename(uri.path);
 		let parent = this._lookupParentDirectory(uri);
 		let entry = parent.entries.get(basename);
@@ -226,7 +345,7 @@ export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearch
 
 		this._fireSoon(
 			{ type: FileChangeType.Deleted, uri: oldUri },
-			{ type: FileChangeType.Created, uri: newUri }
+			{ type: FileChangeType.Created, uri: newUri },
 		);
 	}
 
@@ -240,7 +359,10 @@ export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearch
 		parent.entries.delete(basename);
 		parent.mtime = Date.now();
 		parent.size -= 1;
-		this._fireSoon({ type: FileChangeType.Changed, uri: dirname }, { uri, type: FileChangeType.Deleted });
+		this._fireSoon(
+			{ type: FileChangeType.Changed, uri: dirname },
+			{ uri, type: FileChangeType.Deleted },
+		);
 	}
 
 	createDirectory(uri: Uri): void {
@@ -252,7 +374,10 @@ export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearch
 		parent.entries.set(entry.name, entry);
 		parent.mtime = Date.now();
 		parent.size += 1;
-		this._fireSoon({ type: FileChangeType.Changed, uri: dirname }, { type: FileChangeType.Created, uri });
+		this._fireSoon(
+			{ type: FileChangeType.Changed, uri: dirname },
+			{ type: FileChangeType.Created, uri },
+		);
 	}
 
 	// --- lookup
@@ -260,7 +385,7 @@ export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearch
 	private _lookup(uri: Uri, silent: false): Entry;
 	private _lookup(uri: Uri, silent: boolean): Entry | undefined;
 	private _lookup(uri: Uri, silent: boolean): Entry | undefined {
-		let parts = uri.path.split('/');
+		let parts = uri.path.split("/");
 		let entry: Entry = this.root;
 		for (const part of parts) {
 			if (!part) {
@@ -313,7 +438,7 @@ export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearch
 
 	watch(_resource: Uri): Disposable {
 		// ignore, fires for all changes...
-		return new Disposable(() => { });
+		return new Disposable(() => {});
 	}
 
 	private _fireSoon(...events: FileChangeEvent[]): void {
@@ -332,21 +457,21 @@ export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearch
 	// --- path utils
 
 	private _basename(path: string): string {
-		path = this._rtrim(path, '/');
+		path = this._rtrim(path, "/");
 		if (!path) {
-			return '';
+			return "";
 		}
 
-		return path.substr(path.lastIndexOf('/') + 1);
+		return path.substr(path.lastIndexOf("/") + 1);
 	}
 
 	private _dirname(path: string): string {
-		path = this._rtrim(path, '/');
+		path = this._rtrim(path, "/");
 		if (!path) {
-			return '/';
+			return "/";
 		}
 
-		return path.substr(0, path.lastIndexOf('/'));
+		return path.substr(0, path.lastIndexOf("/"));
 	}
 
 	private _rtrim(haystack: string, needle: string): string {
@@ -370,7 +495,7 @@ export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearch
 				break;
 			}
 			if (idx === 0) {
-				return '';
+				return "";
 			}
 			offset = idx;
 		}
@@ -387,7 +512,7 @@ export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearch
 	}
 
 	private _doGetFiles(dir: Directory, files: Set<File>): void {
-		dir.entries.forEach(entry => {
+		dir.entries.forEach((entry) => {
 			if (entry instanceof File) {
 				files.add(entry);
 			} else {
@@ -397,12 +522,18 @@ export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearch
 	}
 
 	private _convertSimple2RegExpPattern(pattern: string): string {
-		return pattern.replace(/[\-\\\{\}\+\?\|\^\$\.\,\[\]\(\)\#\s]/g, '\\$&').replace(/[\*]/g, '.*');
+		return pattern
+			.replace(/[\-\\\{\}\+\?\|\^\$\.\,\[\]\(\)\#\s]/g, "\\$&")
+			.replace(/[\*]/g, ".*");
 	}
 
 	// --- search provider
 
-	provideFileSearchResults(query: FileSearchQuery, _options: FileSearchOptions, _token: CancellationToken): ProviderResult<Uri[]> {
+	provideFileSearchResults(
+		query: FileSearchQuery,
+		_options: FileSearchOptions,
+		_token: CancellationToken,
+	): ProviderResult<Uri[]> {
 		return this._findFiles(query.pattern);
 	}
 
@@ -410,7 +541,9 @@ export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearch
 		const files = this._getFiles();
 		const result: Uri[] = [];
 
-		const pattern = query ? new RegExp(this._convertSimple2RegExpPattern(query)) : null;
+		const pattern = query
+			? new RegExp(this._convertSimple2RegExpPattern(query))
+			: null;
 
 		for (const file of files) {
 			if (!pattern || pattern.exec(file.name)) {
@@ -423,7 +556,12 @@ export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearch
 
 	private _textDecoder = new TextDecoder();
 
-	provideTextSearchResults(query: TextSearchQuery, options: TextSearchOptions, progress: Progress<TextSearchResult>, _token: CancellationToken) {
+	provideTextSearchResults(
+		query: TextSearchQuery,
+		options: TextSearchOptions,
+		progress: Progress<TextSearchResult>,
+		_token: CancellationToken,
+	) {
 		const result: TextSearchComplete = { limitHit: false };
 
 		const files = this._findFiles(options.includes[0]);
@@ -431,18 +569,27 @@ export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearch
 			for (const file of files) {
 				const content = this._textDecoder.decode(this.readFile(file));
 
-				const lines = content.split('\n');
+				const lines = content.split("\n");
 				for (let i = 0; i < lines.length; i++) {
 					const line = lines[i];
 					const index = line.indexOf(query.pattern);
 					if (index !== -1) {
 						progress.report({
 							uri: file,
-							ranges: new Range(new Position(i, index), new Position(i, index + query.pattern.length)),
+							ranges: new Range(
+								new Position(i, index),
+								new Position(i, index + query.pattern.length),
+							),
 							preview: {
 								text: line,
-								matches: new Range(new Position(0, index), new Position(0, index + query.pattern.length))
-							}
+								matches: new Range(
+									new Position(0, index),
+									new Position(
+										0,
+										index + query.pattern.length,
+									),
+								),
+							},
 						});
 					}
 				}
@@ -456,11 +603,13 @@ export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearch
 function randomData(lineCnt: number, lineLen = 155): Uint8Array {
 	let lines: string[] = [];
 	for (let i = 0; i < lineCnt; i++) {
-		let line = '';
+		let line = "";
 		while (line.length < lineLen) {
-			line += Math.random().toString(2 + (i % 34)).substr(2);
+			line += Math.random()
+				.toString(2 + (i % 34))
+				.substr(2);
 		}
 		lines.push(line.substr(0, lineLen));
 	}
-	return textEncoder.encode(lines.join('\n'));
+	return textEncoder.encode(lines.join("\n"));
 }
