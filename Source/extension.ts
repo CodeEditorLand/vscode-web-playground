@@ -42,6 +42,7 @@ function enableFs(context: vscode.ExtensionContext): MemFS {
 
 function enableProblems(context: vscode.ExtensionContext): void {
 	const collection = vscode.languages.createDiagnosticCollection("test");
+
 	if (vscode.window.activeTextEditor) {
 		updateDiagnostics(vscode.window.activeTextEditor.document, collection);
 	}
@@ -131,10 +132,12 @@ function enableTasks(): void {
 
 		resolveTask(_task: vscode.Task): vscode.Task | undefined {
 			const flavor: string = _task.definition.flavor;
+
 			if (flavor) {
 				const definition: CustomBuildTaskDefinition = <any>(
 					_task.definition
 				);
+
 				return this.getTask(
 					definition.flavor,
 					definition.flags ? definition.flags : [],
@@ -163,6 +166,7 @@ function enableTasks(): void {
 					this.tasks!.push(this.getTask(flavor, flagGroup));
 				});
 			});
+
 			return this.tasks;
 		}
 
@@ -238,7 +242,9 @@ function enableTasks(): void {
 		private async doBuild(): Promise<void> {
 			return new Promise<void>((resolve) => {
 				this.writeEmitter.fire("Starting build...\r\n");
+
 				let isIncremental = this.flags.indexOf("incremental") > -1;
+
 				if (isIncremental) {
 					if (this.getSharedState()) {
 						this.writeEmitter.fire(
@@ -262,6 +268,7 @@ function enableTasks(): void {
 							date.toTimeString() + " " + date.toDateString(),
 						);
 						this.writeEmitter.fire("Build complete.\r\n\r\n");
+
 						if (this.flags.indexOf("watch") === -1) {
 							this.closeEmitter.fire();
 							resolve();

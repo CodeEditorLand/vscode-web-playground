@@ -16,6 +16,7 @@ function createSVGRect(r:Rectangle) {
 	rect.setAttribute('y', r.y.toString());
 	rect.setAttribute('width', r.width.toString());
 	rect.setAttribute('height', r.height.toString());
+
 	return rect;
 }
 
@@ -25,6 +26,7 @@ function createSVGEllipse(r:Rectangle) {
 	ell.setAttribute('ry',(r.height/2).toString());
 	ell.setAttribute('cx',(r.x+r.width/2).toString());
 	ell.setAttribute('cy',(r.y+r.height/2).toString());
+
 	return ell;
 }
 
@@ -34,8 +36,10 @@ function createSVGEllipsePolar(angle:number,radius:number,tx:number,ty:number,cx
 	ell.setAttribute('ry',(radius/3).toString());
 	ell.setAttribute('cx',cxo.toString());
 	ell.setAttribute('cy',cyo.toString());
+
 	var dangle = angle*(180/Math.PI);
 	ell.setAttribute('transform','rotate('+dangle+','+cxo+','+cyo+') translate('+tx+','+ty+')');
+
 	return ell;
 }
 
@@ -44,6 +48,7 @@ function createSVGInscribedCircle(sq:Square) {
 	circle.setAttribute('r',(sq.length/2).toString());
 	circle.setAttribute('cx',(sq.x+(sq.length/2)).toString());
 	circle.setAttribute('cy',(sq.y+(sq.length/2)).toString());
+
 	return circle;
 }
 
@@ -61,14 +66,19 @@ export class Position {
 
 	score() {
 		var baseScore = this.seedCounts[storeHouses[1-this.turn]]-this.seedCounts[storeHouses[this.turn]];
+
 		var otherSpaces = homeSpaces[this.turn];
+
 		var sum = 0;
+
 		for (var k = 0,len = otherSpaces.length;k<len;k++) {
 			sum += this.seedCounts[otherSpaces[k]];
 		}
 		if (sum==0) {
 			var mySpaces = homeSpaces[1-this.turn];
+
 			var mySum = 0;
+
 			for (var j = 0,len = mySpaces.length;j<len;j++) {
 				mySum += this.seedCounts[mySpaces[j]];
 			}
@@ -85,12 +95,15 @@ export class Position {
 		}
 		if (this.seedCounts[space]>0) {
 			features.clear();
+
 			var len = this.seedCounts.length;
+
 			for (var i = 0;i<len;i++) {
 				nextSeedCounts[i] = this.seedCounts[i];
 			}
 			var seedCount = this.seedCounts[space];
 			nextSeedCounts[space] = 0;
+
 			var nextSpace = (space+1)%14;
 
 			while (seedCount>0) {
@@ -111,6 +124,7 @@ export class Position {
 							(nextSpace<=lastHomeSpace[this.turn])) {
 							// capture
 							var capturedSpace = capturedSpaces[nextSpace];
+
 							if (capturedSpace>=0) {
 								features.spaceCaptured = capturedSpace;
 								features.capturedCount = nextSeedCounts[capturedSpace];
@@ -160,17 +174,29 @@ export class DisplayPosition extends Position {
 
 	seedCircleRect(rect:Rectangle,seedCount:number,board:Element,seed:number) {
 		var coords = this.config[seed];
+
 		var sq = rect.inner(0.95).square();
+
 		var cxo = (sq.width/2)+sq.x;
+
 		var cyo = (sq.height/2)+sq.y;
+
 		var seedNumbers = [5,7,9,11];
+
 		var ringIndex = 0;
+
 		var ringRem = seedNumbers[ringIndex];
+
 		var angleDelta = (2*Math.PI)/ringRem;
+
 		var angle = angleDelta;
+
 		var seedLength = sq.width/(seedNumbers.length<<1);
+
 		var crMax = sq.width/2-(seedLength/2);
+
 		var pit = createSVGInscribedCircle(sq);
+
 		if (seed<7) {
 			pit.setAttribute('fill','brown');
 		}
@@ -178,7 +204,9 @@ export class DisplayPosition extends Position {
 			pit.setAttribute('fill','saddlebrown');
 		}
 		board.appendChild(pit);
+
 		var seedsSeen = 0;
+
 		while (seedCount > 0) {
 			if (ringRem == 0) {
 				ringIndex++;
@@ -187,8 +215,11 @@ export class DisplayPosition extends Position {
 				angle = angleDelta;
 			}
 			var tx:number;
+
 			var ty:number;
+
 			var tangle = angle;
+
 			if (coords.length>seedsSeen) {
 				tx = coords[seedsSeen].tx;
 				ty = coords[seedsSeen].ty;
@@ -210,17 +241,25 @@ export class DisplayPosition extends Position {
 
 	toCircleSVG() {
 		var seedDivisions = 14;
+
 		var board = document.createElementNS(svgNS,'svg');
+
 		var boardRect = new Rectangle(0,0,1800,800);
 		board.setAttribute('width','1800');
 		board.setAttribute('height','800');
+
 		var whole = createSVGRect(boardRect);
 		whole.setAttribute('fill','tan');
 		board.appendChild(whole);
+
 		var labPlayLab = boardRect.proportionalSplitVert(20,760,20);
+
 		var playSurface = labPlayLab[1];
+
 		var storeMainStore = playSurface.proportionalSplitHoriz(8,48,8);
+
 		var mainPair = storeMainStore[1].subDivideVert(2);
+
 		var playerRects = [mainPair[0].subDivideHoriz(6), mainPair[1].subDivideHoriz(6)];
 		// reverse top layer because storehouse on left
 		for (var k = 0;k<3;k++) {
@@ -229,14 +268,21 @@ export class DisplayPosition extends Position {
 			playerRects[0][5-k] = temp;
 		}
 		var storehouses = [storeMainStore[0],storeMainStore[2]];
+
 		var playerSeeds = this.seedCounts.length>>1;
+
 		for (var i = 0;i<2;i++) {
 			var player = playerRects[i];
+
 			var storehouse = storehouses[i];
+
 			var r:Rectangle;
+
 			for (var j = 0;j<playerSeeds;j++) {
 				var seed = (i*playerSeeds)+j;
+
 				var seedCount = this.seedCounts[seed];
+
 				if (j==(playerSeeds-1)) {
 					r = storehouse;
 				}
@@ -244,6 +290,7 @@ export class DisplayPosition extends Position {
 					r = player[j];
 				}
 				this.seedCircleRect(r,seedCount,board,seed);
+
 				if (seedCount==0) {
 					// clear
 					this.config[seed] = new Array<SeedCoords>();
@@ -302,6 +349,7 @@ export function getImageFile(): Uint8Array {
 	const data = atob(
 		`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`,
 	);
+
 	return Uint8Array.from([...data].map((x) => x.charCodeAt(0)));
 }
 

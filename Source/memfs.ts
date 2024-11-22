@@ -280,7 +280,9 @@ export class MemFS
 
 	readDirectory(uri: Uri): [string, FileType][] {
 		const entry = this._lookupAsDirectory(uri, false);
+
 		let result: [string, FileType][] = [];
+
 		for (const [name, child] of entry.entries) {
 			result.push([name, child.type]);
 		}
@@ -291,6 +293,7 @@ export class MemFS
 
 	readFile(uri: Uri): Uint8Array {
 		const data = this._lookupAsFile(uri, false).data;
+
 		if (data) {
 			return data;
 		}
@@ -303,8 +306,11 @@ export class MemFS
 		options: { create: boolean; overwrite: boolean },
 	): void {
 		let basename = this._basename(uri.path);
+
 		let parent = this._lookupParentDirectory(uri);
+
 		let entry = parent.entries.get(basename);
+
 		if (entry instanceof Directory) {
 			throw FileSystemError.FileIsADirectory(uri);
 		}
@@ -334,9 +340,11 @@ export class MemFS
 		}
 
 		let entry = this._lookup(oldUri, false);
+
 		let oldParent = this._lookupParentDirectory(oldUri);
 
 		let newParent = this._lookupParentDirectory(newUri);
+
 		let newName = this._basename(newUri.path);
 
 		oldParent.entries.delete(entry.name);
@@ -351,8 +359,11 @@ export class MemFS
 
 	delete(uri: Uri): void {
 		let dirname = uri.with({ path: this._dirname(uri.path) });
+
 		let basename = this._basename(uri.path);
+
 		let parent = this._lookupAsDirectory(dirname, false);
+
 		if (!parent.entries.has(basename)) {
 			throw FileSystemError.FileNotFound(uri);
 		}
@@ -367,7 +378,9 @@ export class MemFS
 
 	createDirectory(uri: Uri): void {
 		let basename = this._basename(uri.path);
+
 		let dirname = uri.with({ path: this._dirname(uri.path) });
+
 		let parent = this._lookupAsDirectory(dirname, false);
 
 		let entry = new Directory(uri, basename);
@@ -386,12 +399,15 @@ export class MemFS
 	private _lookup(uri: Uri, silent: boolean): Entry | undefined;
 	private _lookup(uri: Uri, silent: boolean): Entry | undefined {
 		let parts = uri.path.split("/");
+
 		let entry: Entry = this.root;
+
 		for (const part of parts) {
 			if (!part) {
 				continue;
 			}
 			let child: Entry | undefined;
+
 			if (entry instanceof Directory) {
 				child = entry.entries.get(part);
 			}
@@ -409,6 +425,7 @@ export class MemFS
 
 	private _lookupAsDirectory(uri: Uri, silent: boolean): Directory {
 		let entry = this._lookup(uri, silent);
+
 		if (entry instanceof Directory) {
 			return entry;
 		}
@@ -417,6 +434,7 @@ export class MemFS
 
 	private _lookupAsFile(uri: Uri, silent: boolean): File {
 		let entry = this._lookup(uri, silent);
+
 		if (entry instanceof File) {
 			return entry;
 		}
@@ -425,6 +443,7 @@ export class MemFS
 
 	private _lookupParentDirectory(uri: Uri): Directory {
 		const dirname = uri.with({ path: this._dirname(uri.path) });
+
 		return this._lookupAsDirectory(dirname, false);
 	}
 
@@ -458,6 +477,7 @@ export class MemFS
 
 	private _basename(path: string): string {
 		path = this._rtrim(path, "/");
+
 		if (!path) {
 			return "";
 		}
@@ -467,6 +487,7 @@ export class MemFS
 
 	private _dirname(path: string): string {
 		path = this._rtrim(path, "/");
+
 		if (!path) {
 			return "/";
 		}
@@ -491,6 +512,7 @@ export class MemFS
 
 		while (true) {
 			idx = haystack.lastIndexOf(needle, offset - 1);
+
 			if (idx === -1 || idx + needleLen !== offset) {
 				break;
 			}
@@ -539,6 +561,7 @@ export class MemFS
 
 	private _findFiles(query: string | undefined): Uri[] {
 		const files = this._getFiles();
+
 		const result: Uri[] = [];
 
 		const pattern = query
@@ -565,14 +588,18 @@ export class MemFS
 		const result: TextSearchComplete = { limitHit: false };
 
 		const files = this._findFiles(options.includes[0]);
+
 		if (files) {
 			for (const file of files) {
 				const content = this._textDecoder.decode(this.readFile(file));
 
 				const lines = content.split("\n");
+
 				for (let i = 0; i < lines.length; i++) {
 					const line = lines[i];
+
 					const index = line.indexOf(query.pattern);
+
 					if (index !== -1) {
 						progress.report({
 							uri: file,
@@ -602,8 +629,10 @@ export class MemFS
 
 function randomData(lineCnt: number, lineLen = 155): Uint8Array {
 	let lines: string[] = [];
+
 	for (let i = 0; i < lineCnt; i++) {
 		let line = "";
+
 		while (line.length < lineLen) {
 			line += Math.random()
 				.toString(2 + (i % 34))
