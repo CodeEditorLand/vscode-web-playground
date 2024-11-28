@@ -8,6 +8,7 @@ export const largeTSFile = `/// <reference path="lib/Geometry.ts"/>
 
 module Mankala {
 export var storeHouses = [6,13];
+
 export var svgNS = 'http://www.w3.org/2000/svg';
 
 function createSVGRect(r:Rectangle) {
