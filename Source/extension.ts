@@ -22,8 +22,11 @@ export function activate(context: vscode.ExtensionContext) {
 	if (typeof navigator === "object") {
 		// do not run under node.js
 		const memFs = enableFs(context);
+
 		memFs.seed();
+
 		enableProblems(context);
+
 		enableTasks();
 
 		vscode.commands.executeCommand(
@@ -35,6 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 function enableFs(context: vscode.ExtensionContext): MemFS {
 	const memFs = new MemFS();
+
 	context.subscriptions.push(memFs);
 
 	return memFs;
@@ -46,6 +50,7 @@ function enableProblems(context: vscode.ExtensionContext): void {
 	if (vscode.window.activeTextEditor) {
 		updateDiagnostics(vscode.window.activeTextEditor.document, collection);
 	}
+
 	context.subscriptions.push(
 		vscode.window.onDidChangeActiveTextEditor((editor) => {
 			if (editor) {
@@ -115,6 +120,7 @@ function enableTasks(): void {
 
 	class CustomBuildTaskProvider implements vscode.TaskProvider {
 		static CustomBuildScriptType: string = "custombuildscript";
+
 		private tasks: vscode.Task[] | undefined;
 
 		// We use a CustomExecution task when state needs to be shared accross runs of the task or when
@@ -144,6 +150,7 @@ function enableTasks(): void {
 					definition,
 				);
 			}
+
 			return undefined;
 		}
 
@@ -161,6 +168,7 @@ function enableTasks(): void {
 			];
 
 			this.tasks = [];
+
 			flavors.forEach((flavor) => {
 				flags.forEach((flagGroup) => {
 					this.tasks!.push(this.getTask(flavor, flagGroup));
@@ -182,6 +190,7 @@ function enableTasks(): void {
 					flags,
 				};
 			}
+
 			return new vscode.Task(
 				definition,
 				vscode.TaskScope.Workspace,
@@ -205,8 +214,11 @@ function enableTasks(): void {
 
 	class CustomBuildTaskTerminal implements vscode.Pseudoterminal {
 		private writeEmitter = new vscode.EventEmitter<string>();
+
 		onDidWrite: vscode.Event<string> = this.writeEmitter.event;
+
 		private closeEmitter = new vscode.EventEmitter<void>();
+
 		onDidClose?: vscode.Event<void> = this.closeEmitter.event;
 
 		private fileWatcher: vscode.FileSystemWatcher | undefined;
@@ -223,12 +235,17 @@ function enableTasks(): void {
 			// At this point we can start using the terminal.
 			if (this.flags.indexOf("watch") > -1) {
 				let pattern = this.workspaceRoot + "/customBuildFile";
+
 				this.fileWatcher =
 					vscode.workspace.createFileSystemWatcher(pattern);
+
 				this.fileWatcher.onDidChange(() => this.doBuild());
+
 				this.fileWatcher.onDidCreate(() => this.doBuild());
+
 				this.fileWatcher.onDidDelete(() => this.doBuild());
 			}
+
 			this.doBuild();
 		}
 
@@ -254,6 +271,7 @@ function enableTasks(): void {
 						);
 					} else {
 						isIncremental = false;
+
 						this.writeEmitter.fire(
 							"No result from last build. Doing full build.\r\n",
 						);
@@ -264,13 +282,16 @@ function enableTasks(): void {
 				setTimeout(
 					() => {
 						const date = new Date();
+
 						this.setSharedState(
 							date.toTimeString() + " " + date.toDateString(),
 						);
+
 						this.writeEmitter.fire("Build complete.\r\n\r\n");
 
 						if (this.flags.indexOf("watch") === -1) {
 							this.closeEmitter.fire();
+
 							resolve();
 						}
 					},

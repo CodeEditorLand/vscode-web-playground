@@ -40,11 +40,15 @@ import {
 
 export class File implements FileStat {
 	type: FileType;
+
 	ctime: number;
+
 	mtime: number;
+
 	size: number;
 
 	name: string;
+
 	data?: Uint8Array;
 
 	constructor(
@@ -52,20 +56,28 @@ export class File implements FileStat {
 		name: string,
 	) {
 		this.type = FileType.File;
+
 		this.ctime = Date.now();
+
 		this.mtime = Date.now();
+
 		this.size = 0;
+
 		this.name = name;
 	}
 }
 
 export class Directory implements FileStat {
 	type: FileType;
+
 	ctime: number;
+
 	mtime: number;
+
 	size: number;
 
 	name: string;
+
 	entries: Map<string, File | Directory>;
 
 	constructor(
@@ -73,10 +85,15 @@ export class Directory implements FileStat {
 		name: string,
 	) {
 		this.type = FileType.Directory;
+
 		this.ctime = Date.now();
+
 		this.mtime = Date.now();
+
 		this.size = 0;
+
 		this.name = name;
+
 		this.entries = new Map();
 	}
 }
@@ -119,11 +136,13 @@ export class MemFS
 			textEncoder.encode(largeTSFile),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/file.txt`),
 			textEncoder.encode("foo"),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/file.html`),
 			textEncoder.encode(
@@ -131,31 +150,37 @@ export class MemFS
 			),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/file.js`),
 			textEncoder.encode('console.log("JavaScript")'),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/file.json`),
 			textEncoder.encode('{ "json": true }'),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/file.ts`),
 			textEncoder.encode('console.log("TypeScript")'),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/file.css`),
 			textEncoder.encode("* { color: green; }"),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/file.md`),
 			textEncoder.encode(debuggableFile),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/file.xml`),
 			textEncoder.encode(
@@ -163,6 +188,7 @@ export class MemFS
 			),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/file.py`),
 			textEncoder.encode(
@@ -170,16 +196,19 @@ export class MemFS
 			),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/file.yaml`),
 			textEncoder.encode("- just: write something"),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/file.jpg`),
 			getImageFile(),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/file.php`),
 			textEncoder.encode('<?php echo "Hello World!"; ?>'),
@@ -188,10 +217,15 @@ export class MemFS
 
 		// some more files & folders
 		this.createDirectory(Uri.parse(`memfs:/sample-folder/folder/`));
+
 		this.createDirectory(Uri.parse(`memfs:/sample-folder/workspaces/`));
+
 		this.createDirectory(Uri.parse(`memfs:/sample-folder/large/`));
+
 		this.createDirectory(Uri.parse(`memfs:/sample-folder/xyz/`));
+
 		this.createDirectory(Uri.parse(`memfs:/sample-folder/xyz/abc`));
+
 		this.createDirectory(Uri.parse(`memfs:/sample-folder/xyz/def`));
 
 		this.writeFile(
@@ -199,36 +233,43 @@ export class MemFS
 			new Uint8Array(0),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/folder/empty.foo`),
 			new Uint8Array(0),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/folder/file.ts`),
 			textEncoder.encode("let a:number = true; console.log(a);"),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/large/rnd.foo`),
 			randomData(50000),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/xyz/UPPER.txt`),
 			textEncoder.encode("UPPER"),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/xyz/upper.txt`),
 			textEncoder.encode("upper"),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/xyz/def/foo.md`),
 			textEncoder.encode("*MemFS*"),
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/workspaces/mem.code-workspace`),
 			textEncoder.encode(
@@ -258,11 +299,13 @@ export class MemFS
 
 		// some files in different encodings
 		this.createDirectory(Uri.parse(`memfs:/sample-folder/encodings/`));
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/encodings/windows1251.txt`),
 			windows1251File,
 			{ create: true, overwrite: true },
 		);
+
 		this.writeFile(
 			Uri.parse(`memfs:/sample-folder/encodings/gbk.txt`),
 			gbkFile,
@@ -286,6 +329,7 @@ export class MemFS
 		for (const [name, child] of entry.entries) {
 			result.push([name, child.type]);
 		}
+
 		return result;
 	}
 
@@ -297,6 +341,7 @@ export class MemFS
 		if (data) {
 			return data;
 		}
+
 		throw FileSystemError.FileNotFound();
 	}
 
@@ -314,19 +359,27 @@ export class MemFS
 		if (entry instanceof Directory) {
 			throw FileSystemError.FileIsADirectory(uri);
 		}
+
 		if (!entry && !options.create) {
 			throw FileSystemError.FileNotFound(uri);
 		}
+
 		if (entry && options.create && !options.overwrite) {
 			throw FileSystemError.FileExists(uri);
 		}
+
 		if (!entry) {
 			entry = new File(uri, basename);
+
 			parent.entries.set(basename, entry);
+
 			this._fireSoon({ type: FileChangeType.Created, uri });
 		}
+
 		entry.mtime = Date.now();
+
 		entry.size = content.byteLength;
+
 		entry.data = content;
 
 		this._fireSoon({ type: FileChangeType.Changed, uri });
@@ -348,7 +401,9 @@ export class MemFS
 		let newName = this._basename(newUri.path);
 
 		oldParent.entries.delete(entry.name);
+
 		entry.name = newName;
+
 		newParent.entries.set(newName, entry);
 
 		this._fireSoon(
@@ -367,9 +422,13 @@ export class MemFS
 		if (!parent.entries.has(basename)) {
 			throw FileSystemError.FileNotFound(uri);
 		}
+
 		parent.entries.delete(basename);
+
 		parent.mtime = Date.now();
+
 		parent.size -= 1;
+
 		this._fireSoon(
 			{ type: FileChangeType.Changed, uri: dirname },
 			{ uri, type: FileChangeType.Deleted },
@@ -384,9 +443,13 @@ export class MemFS
 		let parent = this._lookupAsDirectory(dirname, false);
 
 		let entry = new Directory(uri, basename);
+
 		parent.entries.set(entry.name, entry);
+
 		parent.mtime = Date.now();
+
 		parent.size += 1;
+
 		this._fireSoon(
 			{ type: FileChangeType.Changed, uri: dirname },
 			{ type: FileChangeType.Created, uri },
@@ -396,7 +459,9 @@ export class MemFS
 	// --- lookup
 
 	private _lookup(uri: Uri, silent: false): Entry;
+
 	private _lookup(uri: Uri, silent: boolean): Entry | undefined;
+
 	private _lookup(uri: Uri, silent: boolean): Entry | undefined {
 		let parts = uri.path.split("/");
 
@@ -406,11 +471,13 @@ export class MemFS
 			if (!part) {
 				continue;
 			}
+
 			let child: Entry | undefined;
 
 			if (entry instanceof Directory) {
 				child = entry.entries.get(part);
 			}
+
 			if (!child) {
 				if (!silent) {
 					throw FileSystemError.FileNotFound(uri);
@@ -418,8 +485,10 @@ export class MemFS
 					return undefined;
 				}
 			}
+
 			entry = child;
 		}
+
 		return entry;
 	}
 
@@ -429,6 +498,7 @@ export class MemFS
 		if (entry instanceof Directory) {
 			return entry;
 		}
+
 		throw FileSystemError.FileNotADirectory(uri);
 	}
 
@@ -438,6 +508,7 @@ export class MemFS
 		if (entry instanceof File) {
 			return entry;
 		}
+
 		throw FileSystemError.FileIsADirectory(uri);
 	}
 
@@ -450,7 +521,9 @@ export class MemFS
 	// --- manage file events
 
 	private _emitter = new EventEmitter<FileChangeEvent[]>();
+
 	private _bufferedEvents: FileChangeEvent[] = [];
+
 	private _fireSoonHandle?: any;
 
 	readonly onDidChangeFile: Event<FileChangeEvent[]> = this._emitter.event;
@@ -469,6 +542,7 @@ export class MemFS
 
 		this._fireSoonHandle = setTimeout(() => {
 			this._emitter.fire(this._bufferedEvents);
+
 			this._bufferedEvents.length = 0;
 		}, 5);
 	}
@@ -516,9 +590,11 @@ export class MemFS
 			if (idx === -1 || idx + needleLen !== offset) {
 				break;
 			}
+
 			if (idx === 0) {
 				return "";
 			}
+
 			offset = idx;
 		}
 
@@ -638,7 +714,9 @@ function randomData(lineCnt: number, lineLen = 155): Uint8Array {
 				.toString(2 + (i % 34))
 				.substr(2);
 		}
+
 		lines.push(line.substr(0, lineLen));
 	}
+
 	return textEncoder.encode(lines.join("\n"));
 }

@@ -13,9 +13,13 @@ export var svgNS = 'http://www.w3.org/2000/svg';
 
 function createSVGRect(r:Rectangle) {
 	var rect = document.createElementNS(svgNS,'rect');
+
 	rect.setAttribute('x', r.x.toString());
+
 	rect.setAttribute('y', r.y.toString());
+
 	rect.setAttribute('width', r.width.toString());
+
 	rect.setAttribute('height', r.height.toString());
 
 	return rect;
@@ -23,9 +27,13 @@ function createSVGRect(r:Rectangle) {
 
 function createSVGEllipse(r:Rectangle) {
 	var ell = document.createElementNS(svgNS,'ellipse');
+
 	ell.setAttribute('rx',(r.width/2).toString());
+
 	ell.setAttribute('ry',(r.height/2).toString());
+
 	ell.setAttribute('cx',(r.x+r.width/2).toString());
+
 	ell.setAttribute('cy',(r.y+r.height/2).toString());
 
 	return ell;
@@ -33,12 +41,17 @@ function createSVGEllipse(r:Rectangle) {
 
 function createSVGEllipsePolar(angle:number,radius:number,tx:number,ty:number,cxo:number,cyo:number) {
 	var ell = document.createElementNS(svgNS,'ellipse');
+
 	ell.setAttribute('rx',radius.toString());
+
 	ell.setAttribute('ry',(radius/3).toString());
+
 	ell.setAttribute('cx',cxo.toString());
+
 	ell.setAttribute('cy',cyo.toString());
 
 	var dangle = angle*(180/Math.PI);
+
 	ell.setAttribute('transform','rotate('+dangle+','+cxo+','+cyo+') translate('+tx+','+ty+')');
 
 	return ell;
@@ -46,8 +59,11 @@ function createSVGEllipsePolar(angle:number,radius:number,tx:number,ty:number,cx
 
 function createSVGInscribedCircle(sq:Square) {
 	var circle = document.createElementNS(svgNS,'circle');
+
 	circle.setAttribute('r',(sq.length/2).toString());
+
 	circle.setAttribute('cx',(sq.x+(sq.length/2)).toString());
+
 	circle.setAttribute('cy',(sq.y+(sq.length/2)).toString());
 
 	return circle;
@@ -56,12 +72,16 @@ function createSVGInscribedCircle(sq:Square) {
 export class Position {
 
 	seedCounts:number[];
+
 	startMove:number;
+
 	turn:number;
 
 	constructor(seedCounts:number[],startMove:number,turn:number) {
 		this.seedCounts = seedCounts;
+
 		this.startMove = startMove;
+
 		this.turn = turn;
 	}
 
@@ -75,6 +95,7 @@ export class Position {
 		for (var k = 0,len = otherSpaces.length;k<len;k++) {
 			sum += this.seedCounts[otherSpaces[k]];
 		}
+
 		if (sum==0) {
 			var mySpaces = homeSpaces[1-this.turn];
 
@@ -86,6 +107,7 @@ export class Position {
 
 			baseScore -= mySum;
 		}
+
 		return baseScore;
 	}
 
@@ -94,6 +116,7 @@ export class Position {
 			// can't move seeds in storehouse
 			return false;
 		}
+
 		if (this.seedCounts[space]>0) {
 			features.clear();
 
@@ -102,7 +125,9 @@ export class Position {
 			for (var i = 0;i<len;i++) {
 				nextSeedCounts[i] = this.seedCounts[i];
 			}
+
 			var seedCount = this.seedCounts[space];
+
 			nextSeedCounts[space] = 0;
 
 			var nextSpace = (space+1)%14;
@@ -111,14 +136,18 @@ export class Position {
 				if (nextSpace==storeHouses[this.turn]) {
 					features.seedStoredCount++;
 				}
+
 				if ((nextSpace!=storeHouses[1-this.turn])) {
 					nextSeedCounts[nextSpace]++;
+
 					seedCount--;
 				}
+
 				if (seedCount==0) {
 					if (nextSpace==storeHouses[this.turn]) {
 						features.turnContinues = true;
 					}
+
 					else {
 						if ((nextSeedCounts[nextSpace]==1)&&
 							(nextSpace>=firstHomeSpace[this.turn])&&
@@ -128,18 +157,25 @@ export class Position {
 
 							if (capturedSpace>=0) {
 								features.spaceCaptured = capturedSpace;
+
 								features.capturedCount = nextSeedCounts[capturedSpace];
+
 								nextSeedCounts[capturedSpace] = 0;
+
 								nextSeedCounts[storeHouses[this.turn]] += features.capturedCount;
+
 								features.seedStoredCount += nextSeedCounts[capturedSpace];
 							}
 						}
 					}
 				}
+
 				nextSpace = (nextSpace+1)%14;
 			}
+
 			return true;
 		}
+
 		else {
 			return false;
 		}
@@ -148,12 +184,16 @@ export class Position {
 
 export class SeedCoords {
 	tx:number;
+
 	ty:number;
+
 	angle:number;
 
 	constructor(tx:number, ty:number, angle:number) {
 		this.tx = tx;
+
 		this.ty = ty;
+
 		this.angle = angle;
 	}
 }
@@ -201,9 +241,11 @@ export class DisplayPosition extends Position {
 		if (seed<7) {
 			pit.setAttribute('fill','brown');
 		}
+
 		else {
 			pit.setAttribute('fill','saddlebrown');
 		}
+
 		board.appendChild(pit);
 
 		var seedsSeen = 0;
@@ -211,10 +253,14 @@ export class DisplayPosition extends Position {
 		while (seedCount > 0) {
 			if (ringRem == 0) {
 				ringIndex++;
+
 				ringRem = seedNumbers[ringIndex];
+
 				angleDelta = (2*Math.PI)/ringRem;
+
 				angle = angleDelta;
 			}
+
 			var tx:number;
 
 			var ty:number;
@@ -223,19 +269,30 @@ export class DisplayPosition extends Position {
 
 			if (coords.length>seedsSeen) {
 				tx = coords[seedsSeen].tx;
+
 				ty = coords[seedsSeen].ty;
+
 				tangle = coords[seedsSeen].angle;
 			}
+
 			else {
 				tx = (Math.random()*crMax)-(crMax/3);
+
 				ty = (Math.random()*crMax)-(crMax/3);
+
 				coords[seedsSeen] = new SeedCoords(tx,ty,angle);
 			}
+
 			var ell = createSVGEllipsePolar(tangle,seedLength,tx,ty,cxo,cyo);
+
 			board.appendChild(ell);
+
 			angle += angleDelta;
+
 			ringRem--;
+
 			seedCount--;
+
 			seedsSeen++;
 		}
 	}
@@ -246,11 +303,15 @@ export class DisplayPosition extends Position {
 		var board = document.createElementNS(svgNS,'svg');
 
 		var boardRect = new Rectangle(0,0,1800,800);
+
 		board.setAttribute('width','1800');
+
 		board.setAttribute('height','800');
 
 		var whole = createSVGRect(boardRect);
+
 		whole.setAttribute('fill','tan');
+
 		board.appendChild(whole);
 
 		var labPlayLab = boardRect.proportionalSplitVert(20,760,20);
@@ -265,9 +326,12 @@ export class DisplayPosition extends Position {
 		// reverse top layer because storehouse on left
 		for (var k = 0;k<3;k++) {
 			var temp = playerRects[0][k];
+
 			playerRects[0][k] = playerRects[0][5-k];
+
 			playerRects[0][5-k] = temp;
 		}
+
 		var storehouses = [storeMainStore[0],storeMainStore[2]];
 
 		var playerSeeds = this.seedCounts.length>>1;
@@ -287,9 +351,11 @@ export class DisplayPosition extends Position {
 				if (j==(playerSeeds-1)) {
 					r = storehouse;
 				}
+
 				else {
 					r = player[j];
 				}
+
 				this.seedCircleRect(r,seedCount,board,seed);
 
 				if (seedCount==0) {
@@ -298,6 +364,7 @@ export class DisplayPosition extends Position {
 				}
 			}
 		}
+
 		return board;
 	}
 }
