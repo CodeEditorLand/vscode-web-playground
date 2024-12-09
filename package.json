@@ -34,6 +34,7 @@
 			}
 		]
 	},
+	"dependencies": {},
 	"description": "Web playground for VS Code",
 	"devDependencies": {
 		"ts-loader": "9.5.1"
@@ -42,7 +43,7 @@
 		"fileSearchProvider",
 		"textSearchProvider"
 	],
-	"name": "vscode-web-playground",
+	"name": "@codeeditorland/web-playground",
 	"scripts": {
 		"compile": "yarn webpack-cli --config extension.webpack.config --mode production"
 	}
