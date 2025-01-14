@@ -41,7 +41,7 @@
 	],
 	"dependencies": {},
 	"devDependencies": {
-		"ts-loader": "9.5.1"
+		"ts-loader": "9.5.2"
 	},
 	"enabledApiProposals": [
 		"fileSearchProvider",
